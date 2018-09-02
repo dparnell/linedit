@@ -29,8 +29,9 @@
 (defvar +linedit-attr-error+      5)
 (defvar +linedit-no-attr-error+   6)
 
-(let (attr)
 
+(let (attr)
+  #-win32
   (defun c-terminal-init ()
     (if (zerop (isatty 0))
         (return-from c-terminal-init +linedit-not-atty+))
@@ -59,6 +60,11 @@
 
     +linedit-ok+)
 
+  #+win32
+  (defun c-terminal-init ()
+    +linedit-ok+)
+
+  #-win32
   (defun c-terminal-close ()
     ;; Restore saved terminal state from attr
     (if (null attr)
@@ -73,8 +79,13 @@
     (cffi:foreign-free attr)
     (setf attr nil)
 
+    +linedit-ok+)
+
+  #+win32
+  (defun c-terminal-close ()
     +linedit-ok+))
 
+  #-win32
 (defun c-terminal-winsize (def side side-env)
   (if (boundp 'TIOCGWINSZ)
       (cffi:with-foreign-object (size '(:struct winsize))
@@ -84,8 +95,22 @@
            (parse-integer it)
            def)))
 
+
+  #-win32
 (defun c-terminal-lines (def)
   (c-terminal-winsize def 'osicat-posix:row "LINES"))
 
+  #-win32
 (defun c-terminal-columns (def)
   (c-terminal-winsize def 'osicat-posix:col "COLUMNS"))
+
+
+  #+win32
+(defun c-terminal-lines (def)
+  (declare (ignore def))
+  25)
+
+  #+win32
+(defun c-terminal-columns (def)
+  (declare (ignore def))
+  80)

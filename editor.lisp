@@ -133,6 +133,9 @@
      ,@forms))
 
 (defun editor-interrupt (editor)
+  #+win32
+  (declare (ignore editor))
+  #-win32
   (without-backend editor
     ;; On CCL, the signal isn't delivered before this function
     ;; returns, which leads to blindness at the next prompt, or worse.
@@ -140,6 +143,9 @@
     #-ccl (osicat-posix:kill 0 osicat-posix:sigint)))
 
 (defun editor-stop (editor)
+  #+win32
+  (declare (ignore editor))
+  #-win32
   (without-backend editor (osicat-posix:kill 0 osicat-posix:sigtstp)))
 
 (defun editor-word-start (editor)

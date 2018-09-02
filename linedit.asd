@@ -31,7 +31,10 @@
   :author "Nikodemus Siivola <nikodemus@random-state.net>"
   :maintainer "Anmol Khirbat <anmol@khirbat.net>"
   :homepage "https://github.com/sharplispers/linedit"
-  :depends-on (:cffi :terminfo :osicat :alexandria)
+  :depends-on (#-win32 :cffi
+               :terminfo
+               #-win32 :osicat
+               :alexandria)
   :components
   (
    ;; Common

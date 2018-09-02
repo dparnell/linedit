@@ -22,7 +22,9 @@
 ;;;; Package
 
 (defpackage :linedit
-  (:use :cl :osicat)
+  (:use :cl
+        #-win32 :osicat)
+  #-win32
   (:import-from :osicat-posix
                 #:getenv
                 #:ioctl
