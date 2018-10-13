@@ -65,7 +65,9 @@
 (defvar *announced* nil)
 
 (defun make-editor (&rest args)
-  (ti:set-terminal)
+  (unless ti:*terminfo*
+    (ti:set-terminal))
+
   (let* ((type (if (smart-terminal-p)
                    'smart-editor
                    'dumb-editor))
